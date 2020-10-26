@@ -7,50 +7,35 @@ defmodule CommonsPub.Acls.AclGrant do
     table_id: "MAKESACCESSGRANTPART0FAC1S",
     source: "cpub_acls_acl_grant"
 
-  alias CommonsPub.Acls.{Acl, AclGrant, Foam}
+  alias CommonsPub.Acls.{Acl, AclGrant}
   alias Pointers.{Changesets, Pointer}
 
   pointable_schema do
-    belongs_to :foam, Foam
-    belongs_to :subject, Pointer
-    belongs_to :acl, Acl
+    belongs_to :access_grant, Pointer
+    belongs_to :access_list, Acl
   end
 
-  def changeset(acl \\ %Acl{}, attrs, opts \\ []),
+  def changeset(acl \\ %AclGrant{}, attrs, opts \\ []),
     do: Changesets.auto(acl, attrs, opts, [])
- 
 end
+
 defmodule CommonsPub.Acls.AclGrant.Migration do
 
   use Ecto.Migration
   import Pointers.Migration
-  alias CommonsPub.Acls.{Acl, AclGrant, Foam}
+  alias CommonsPub.Acls.{Acl, AclGrant}
 
-  def migrate_acl(dir \\ direction())
-  def migrate_acl(:up), do: create_acl_table
-  def migrate_acl(:down), do: drop_acl_table()
-
-  defmacro create_acl_table() do
-    quote do
-      CommonsPub.Acls.Acl.Migration.create_acl_table do
-      end
-    end
-  end
-
-  defmacro create_acl_table([do: body]) do
-    quote do
-      Pointers.Migration.create_pointable_table(CommonsPub.Acls.Acl) do
-        Ecto.Migration.add :foam_id,
-          Pointers.Migrations.strong_pointer(CommonsPub.Acls.Foam)
-        Ecto.Migration.add :subject_id,
-          Pointers.Migrations.strong_pointer()
-        Ecto.Migration.add :acl_id,
-          Pointers.Migrations.strong_pointer(CommonsPub.Acls.Acl)
-        unquote_splicing(body)
-      end
+  def create_acl_table() do
+    create_pointable_table(AclGrant) do
+      add :access_grant_id, strong_pointer()
+      add :access_list_id, strong_pointer(CommonsPub.Acls.Acl)
     end
   end
 
   def drop_acl_table(), do: drop_pointable_table(Acl)
+
+  def migrate_acl_grant(dir \\ direction())
+  def migrate_acl_grant(:up), do: create_acl_table()
+  def migrate_acl_grant(:down), do: drop_acl_table()
 
 end
