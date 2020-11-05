@@ -1,14 +1,14 @@
-defmodule CommonsPub.Access.Access do
+defmodule CommonsPub.Acls.Acl do
   @moduledoc """
   """
 
   use Pointers.Pointable,
     otp_app: :cpub_acls,
     table_id: "11STSPERM1TTED1NTERACT10NS",
-    source: "cpub_access_access"
+    source: "cpub_acls_acls"
 
   alias CommonsPub.Acls.Acl
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Changesets
 
   pointable_schema do
   end
@@ -23,23 +23,30 @@ defmodule CommonsPub.Acls.Acl.Migration do
   import Pointers.Migration
   alias CommonsPub.Acls.Acl
 
-  def migrate_acl(dir \\ direction())
-  def migrate_acl(:up), do: create_acl_table
-  def migrate_acl(:down), do: drop_acl_table()
+  # create_acl_table/{0,1}
 
-  defmacro create_acl_table() do
+  defp make_acl_table(exprs) do
     quote do
       CommonsPub.Acls.Acl.Migration.create_acl_table do
+        unquote_splicing(exprs)
       end
     end
   end
 
-  defmacro create_acl_table([do: body]) do
-    quote do
-      Pointers.Migration.create_pointable_table(Acl), do: unquote(body)
-    end
-  end
+  defmacro create_acl_table(), do: make_acl_table([])
+  defmacro create_acl_table([do: body]), do: make_acl_table(body)
+
+  # drop_acl_table/0
 
   def drop_acl_table(), do: drop_pointable_table(Acl)
+
+  # migrate_acl/{0,1}
+
+  defp ma(:up), do: make_acl_table([])
+  defp ma(:down) do
+    quote do: CommonsPub.Acls.AclGrant.Migration.drop_acl_table()
+  end
+
+  defmacro migrate_acl(dir \\ direction()), do: ma(dir)
 
 end
