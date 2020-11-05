@@ -27,15 +27,15 @@ defmodule CommonsPub.Acls.Acl.Migration do
 
   defp make_acl_table(exprs) do
     quote do
-      require CommonsPub.Acls.Acl.Migration
-      CommonsPub.Acls.Acl.Migration.create_acl_table do
+      require Pointers.Migration
+      Pointers.Migration.create_pointable_table(CommonsPub.Acls.Acl) do
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_acl_table(), do: make_acl_table([])
-  defmacro create_acl_table([do: body]), do: make_acl_table(body)
+  defmacro create_acl_table([do: {_, _, body}]), do: make_acl_table(body)
 
   # drop_acl_table/0
 
@@ -43,11 +43,25 @@ defmodule CommonsPub.Acls.Acl.Migration do
 
   # migrate_acl/{0,1}
 
-  defp ma(:up), do: make_acl_table([])
+  defp ma(:up) do
+    quote do
+      require CommonsPub.Acls.Acl.Migration
+      CommonsPub.Acls.Acl.Migration.create_acl_table()
+    end      
+  end
   defp ma(:down) do
-    quote do: CommonsPub.Acls.Acl.Migration.drop_acl_table()
+    quote do
+      CommonsPub.Acls.Acl.Migration.drop_acl_table()
+    end
   end
 
-  defmacro migrate_acl(dir \\ direction()), do: ma(dir)
+  defmacro migrate_acl() do
+    quote do
+      if Ecto.Migration.direction() == :up,
+        do: unquote(ma(:up)),
+        else: unquote(ma(:down))
+    end
+  end
+  defmacro migrate_acl(dir), do: ma(dir)
 
 end

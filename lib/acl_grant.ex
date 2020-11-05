@@ -37,16 +37,16 @@ defmodule CommonsPub.Acls.AclGrant.Migration do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(CommonsPub.Acls.AclGrant) do
         Ecto.Migration.add :acl_id,
-          Pointers.Migrations.strong_pointer(CommonsPub.Acls.Acl)
+          Pointers.Migration.strong_pointer(CommonsPub.Acls.Acl)
         Ecto.Migration.add :access_grant_id,
-          Pointers.Migrations.strong_pointer(CommonsPub.Access.AccessGrant)
+          Pointers.Migration.strong_pointer(CommonsPub.Access.AccessGrant)
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_acl_grant_table(), do: make_acl_grant_table([])
-  defmacro create_acl_grant_table([do: body]), do: make_acl_grant_table(body)
+  defmacro create_acl_grant_table([do: {_, _, body}]), do: make_acl_grant_table(body)
 
   # drop_acl_grant_table/0
 
@@ -71,7 +71,7 @@ defmodule CommonsPub.Acls.AclGrant.Migration do
   defp make_acl_grant_secondary_index(opts) do
     quote do
       Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@acl_grant_table), @secondary_index, unquote(opts))
+        Ecto.Migration.index(unquote(@acl_grant_table), unquote(@secondary_index), unquote(opts))
       )
     end
   end
@@ -101,6 +101,13 @@ defmodule CommonsPub.Acls.AclGrant.Migration do
     end
   end
 
-  defmacro migrate_acl_grant(dir \\ direction()), do: mag(dir)
+  defmacro migrate_acl_grant() do
+    quote do
+      if Ecto.Migration.direction() == :up,
+        do: unquote(mag(:up)),
+        else: unquote(mag(:down))
+    end
+  end
+  defmacro migrate_acl_grant(dir), do: mag(dir)
 
 end
