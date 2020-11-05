@@ -27,6 +27,7 @@ defmodule CommonsPub.Acls.Acl.Migration do
 
   defp make_acl_table(exprs) do
     quote do
+      require CommonsPub.Acls.Acl.Migration
       CommonsPub.Acls.Acl.Migration.create_acl_table do
         unquote_splicing(exprs)
       end

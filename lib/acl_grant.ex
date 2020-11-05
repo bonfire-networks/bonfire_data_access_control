@@ -34,6 +34,7 @@ defmodule CommonsPub.Acls.AclGrant.Migration do
 
   defp make_acl_grant_table(exprs) do
     quote do
+      require Pointers.Migration
       Pointers.Migration.create_pointable_table(CommonsPub.Acls.AclGrant) do
         Ecto.Migration.add :acl_id,
           Pointers.Migrations.strong_pointer(CommonsPub.Acls.Acl)
@@ -85,9 +86,10 @@ defmodule CommonsPub.Acls.AclGrant.Migration do
 
   defp mag(:up) do
     quote do
-      unquote_splicing(make_acl_grant_table([]))
-      unquote_splicing(make_acl_grant_unique_index([]))
-      unquote_splicing(make_acl_grant_secondary_index([]))
+      require CommonsPub.Acls.AclGrant.Migration
+      CommonsPub.Acls.AclGrant.Migration.create_acl_grant_table()
+      CommonsPub.Acls.AclGrant.Migration.create_acl_grant_unique_index()
+      CommonsPub.Acls.AclGrant.Migration.create_acl_grant_secondary_index()
     end
   end
 
