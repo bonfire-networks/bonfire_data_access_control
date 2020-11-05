@@ -44,7 +44,7 @@ defmodule CommonsPub.Acls.Acl.Migration do
 
   defp ma(:up), do: make_acl_table([])
   defp ma(:down) do
-    quote do: CommonsPub.Acls.AclGrant.Migration.drop_acl_table()
+    quote do: CommonsPub.Acls.Acl.Migration.drop_acl_table()
   end
 
   defmacro migrate_acl(dir \\ direction()), do: ma(dir)
