@@ -37,9 +37,9 @@ defmodule CommonsPub.Acls.AclGrant.Migration do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(CommonsPub.Acls.AclGrant) do
         Ecto.Migration.add :acl_id,
-          Pointers.Migration.strong_pointer(CommonsPub.Acls.Acl)
+          Pointers.Migration.strong_pointer(CommonsPub.Acls.Acl), null: false
         Ecto.Migration.add :access_grant_id,
-          Pointers.Migration.strong_pointer(CommonsPub.Access.AccessGrant)
+          Pointers.Migration.strong_pointer(CommonsPub.Access.AccessGrant), null: false
         unquote_splicing(exprs)
       end
     end
