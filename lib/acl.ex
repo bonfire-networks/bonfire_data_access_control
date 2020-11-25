@@ -1,13 +1,13 @@
-defmodule CommonsPub.Acls.Acl do
+defmodule Bonfire.Data.AccessControl.Acl do
   @moduledoc """
   """
 
   use Pointers.Pointable,
-    otp_app: :cpub_acls,
+    otp_app: :bonfire_data_accesscontrol,
     table_id: "11STSPERM1TTED1NTERACT10NS",
-    source: "cpub_acls_acls"
+    source: "bonfire_data_accesscontrol_acl"
 
-  alias CommonsPub.Acls.Acl
+  alias Bonfire.Data.AccessControl.Acl
   alias Pointers.Changesets
 
   pointable_schema do
@@ -17,18 +17,18 @@ defmodule CommonsPub.Acls.Acl do
     do: Changesets.auto(acl, attrs, opts, [])
  
 end
-defmodule CommonsPub.Acls.Acl.Migration do
+defmodule Bonfire.Data.AccessControl.Acl.Migration do
 
   use Ecto.Migration
   import Pointers.Migration
-  alias CommonsPub.Acls.Acl
+  alias Bonfire.Data.AccessControl.Acl
 
   # create_acl_table/{0,1}
 
   defp make_acl_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_pointable_table(CommonsPub.Acls.Acl) do
+      Pointers.Migration.create_pointable_table(Bonfire.Data.AccessControl.Acl) do
         unquote_splicing(exprs)
       end
     end
@@ -45,13 +45,13 @@ defmodule CommonsPub.Acls.Acl.Migration do
 
   defp ma(:up) do
     quote do
-      require CommonsPub.Acls.Acl.Migration
-      CommonsPub.Acls.Acl.Migration.create_acl_table()
+      require Bonfire.Data.AccessControl.Acl.Migration
+      Bonfire.Data.AccessControl.Acl.Migration.create_acl_table()
     end      
   end
   defp ma(:down) do
     quote do
-      CommonsPub.Acls.Acl.Migration.drop_acl_table()
+      Bonfire.Data.AccessControl.Acl.Migration.drop_acl_table()
     end
   end
 

@@ -1,21 +1,21 @@
 Code.eval_file("mess.exs")
-defmodule CommonsPub.Acls.MixProject do
+defmodule Bonfire.Data.AccessControl.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :cpub_acls,
+      app: :bonfire_data_accesscontrol,
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
-      description: "Acl-related models for commonspub",
-      homepage_url: "https://github.com/commonspub/cpub_acls",
-      source_url: "https://github.com/commonspub/cpub_acls",
+      description: "Access Control models for commonspub",
+      homepage_url: "https://github.com/bonfire-ecosystem/bonfire_data_accesscontrol",
+      source_url: "https://github.com/bonfire-ecosystem/bonfire_data_accesscontrol",
       package: [
         licenses: ["MPL 2.0"],
         links: %{
-          "Repository" => "https://github.com/commonspub/cpub_acls",
-          "Hexdocs" => "https://hexdocs.pm/cpub_acls",
+          "Repository" => "https://github.com/bonfire-ecosystem/bonfire_data_accesscontrol",
+          "Hexdocs" => "https://hexdocs.pm/bonfire_data_accesscontrol",
         },
       ],
       docs: [
