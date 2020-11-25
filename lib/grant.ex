@@ -3,9 +3,9 @@ defmodule Bonfire.Data.AccessControl.Grant do
   """
 
   use Pointers.Pointable,
-    otp_app: :bonfire_data_accesscontrol,
+    otp_app: :bonfire_data_access_control,
     table_id: "GRANTSS0MEACCESST0ASVBJECT",
-    source: "bonfire_data_accesscontrol_grant"
+    source: "bonfire_data_access_control_grant"
 
   alias Bonfire.Data.AccessControl.{Acl, Access, Grant}
   alias Pointers.{Changesets, Pointer}
@@ -27,7 +27,6 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
 
   @grant_table Grant.__schema__(:source)
   @unique_index [:acl_id, :subject_id, :access_id]
-  @secondary_indexes [:subject_id, :access_id]
 
   # create_grant_table/{0,1}
 
@@ -53,7 +52,7 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
 
   def drop_grant_table(), do: drop_pointable_table(Grant)
 
-  # create_acl_grant_unique_index/{0,1}
+  # create_grant_unique_index/{0,1}
 
   defp make_grant_unique_index(opts) do
     quote do
@@ -69,41 +68,52 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   def drop_grant_unique_index(opts \\ [])
   def drop_grant_unique_index(opts), do: drop_if_exists(unique_index(@grant_table, @unique_index, opts))
 
-  defp make_grant_secondary_indexes(opts) do
+  defp make_grant_subject_index(opts) do
     quote do
-      unquote_splicing(Enum.map(@secondary_indexes, fn i ->
-            quote do
-              Ecto.Migration.create_if_not_exists(
-                Ecto.Migration.index(unquote(@grant_table), unquote(i), unquote(opts))
-              )
-            end
-          ))
+      Ecto.Migration.create_if_not_exists(
+        Ecto.Migration.index(unquote(@grant_table), [:subject_id], unquote(opts))
+      )
     end
   end
 
-  defmacro create_grant_secondary_indexes(opts \\ [])
-  defmacro create_grant_secondary_indexes(opts), do: make_grant_secondary_indexes(opts)
-
-  def drop_grant_secondary_index(opts \\ [])
-  def drop_grant_secondary_index(opts) do
-    for i in @secondary_indexes do
-      drop_if_exists(index(@grant_table, i, opts))
+  defp make_grant_access_index(opts) do
+    quote do
+      Ecto.Migration.create_if_not_exists(
+        Ecto.Migration.index(unquote(@grant_table), [:access_id], unquote(opts))
+      )
     end
   end
+
+  defmacro create_grant_subject_index(opts \\ [])
+  defmacro create_grant_subject_index(opts), do: make_grant_subject_index(opts)
+
+  defmacro create_grant_access_index(opts \\ [])
+  defmacro create_grant_access_index(opts), do: make_grant_access_index(opts)
+
+  def drop_grant_subject_index(opts \\ []) do
+      drop_if_exists(index(@grant_table, [:subject_id], opts))
+  end
+
+  def drop_grant_access_index(opts \\ []) do
+      drop_if_exists(index(@grant_table, [:access_id], opts))
+  end
+
 
   # migrate_grant/{0,1}
 
-  defp mag(:up) do
+  defp mg(:up) do
     quote do
       require Bonfire.Data.AccessControl.Grant.Migration
       Bonfire.Data.AccessControl.Grant.Migration.create_grant_table()
       Bonfire.Data.AccessControl.Grant.Migration.create_grant_unique_index()
-      Bonfire.Data.AccessControl.Grant.Migration.create_grant_secondary_indexes()
+      Bonfire.Data.AccessControl.Grant.Migration.create_grant_subject_index()
+      Bonfire.Data.AccessControl.Grant.Migration.create_grant_access_index()
     end
   end
-  defp mag(:down) do
+  defp mg(:down) do
     quote do
-      Bonfire.Data.AccessControl.Grant.Migration.drop_grant_secondary_indexes()
+      Bonfire.Data.AccessControl.Grant.Migration.drop_grant_access_index()
+      Bonfire.Data.AccessControl.Grant.Migration.drop_grant_subject_index()
       Bonfire.Data.AccessControl.Grant.Migration.drop_grant_unique_index()
       Bonfire.Data.AccessControl.Grant.Migration.drop_grant_table()
     end
@@ -112,11 +122,11 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   defmacro migrate_grant() do
     quote do
       if Ecto.Migration.direction() == :up,
-        do: unquote(mag(:up)),
-        else: unquote(mag(:down))
+        do: unquote(mg(:up)),
+        else: unquote(mg(:down))
     end
   end
 
-  defmacro migrate_grant(dir), do: mag(dir)
+  defmacro migrate_grant(dir), do: mg(dir)
 
 end

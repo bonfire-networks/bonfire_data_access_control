@@ -3,9 +3,9 @@ defmodule Bonfire.Data.AccessControl.Access do
   """
 
   use Pointers.Pointable,
-    otp_app: :bonfire_data_accesscontrol,
+    otp_app: :bonfire_data_access_control,
     table_id: "ABVNCH0FPERM1SS10NS1NA11ST",
-    source: "bonfire_data_accesscontrol_access"
+    source: "bonfire_data_access_control_access"
 
   alias Bonfire.Data.AccessControl.Access
   alias Pointers.Changesets
