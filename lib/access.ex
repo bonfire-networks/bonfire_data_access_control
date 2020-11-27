@@ -45,10 +45,7 @@ defmodule Bonfire.Data.AccessControl.Access.Migration do
 
   defp ma(:up), do: make_access_table([])
   defp ma(:down) do
-    quote do
-      require Bonfire.Data.AccessControl.Access.Migration
-      Bonfire.Data.AccessControl.Access.Migration.drop_access_table()
-    end
+    quote do: Bonfire.Data.AccessControl.Access.Migration.drop_access_table()
   end
 
   defmacro migrate_access() do

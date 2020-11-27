@@ -13,6 +13,7 @@ defmodule Bonfire.Data.AccessControl.Grant do
   pointable_schema do
     belongs_to :subject, Pointer
     belongs_to :access, Access
+    belongs_to :acl, Acl
   end
 
   def changeset(grant \\ %Grant{}, attrs, opts \\ []),
@@ -36,10 +37,10 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
       Pointers.Migration.create_pointable_table(Bonfire.Data.AccessControl.Grant) do
         Ecto.Migration.add :subject_id,
           Pointers.Migration.strong_pointer(), null: false
-        Ecto.Migration.add :acl_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl), null: false
         Ecto.Migration.add :access_id,
           Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Access), null: false
+        Ecto.Migration.add :acl_id,
+          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl), null: false
         unquote_splicing(exprs)
       end
     end
@@ -103,11 +104,10 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
 
   defp mg(:up) do
     quote do
-      require Bonfire.Data.AccessControl.Grant.Migration
-      Bonfire.Data.AccessControl.Grant.Migration.create_grant_table()
-      Bonfire.Data.AccessControl.Grant.Migration.create_grant_unique_index()
-      Bonfire.Data.AccessControl.Grant.Migration.create_grant_subject_index()
-      Bonfire.Data.AccessControl.Grant.Migration.create_grant_access_index()
+      unquote(make_grant_table([]))
+      unquote(make_grant_unique_index([]))
+      unquote(make_grant_subject_index([]))
+      unquote(make_grant_access_index([]))
     end
   end
   defp mg(:down) do

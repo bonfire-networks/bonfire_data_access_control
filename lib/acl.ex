@@ -43,16 +43,9 @@ defmodule Bonfire.Data.AccessControl.Acl.Migration do
 
   # migrate_acl/{0,1}
 
-  defp ma(:up) do
-    quote do
-      require Bonfire.Data.AccessControl.Acl.Migration
-      Bonfire.Data.AccessControl.Acl.Migration.create_acl_table()
-    end      
-  end
+  defp ma(:up), do: make_acl_table([])
   defp ma(:down) do
-    quote do
-      Bonfire.Data.AccessControl.Acl.Migration.drop_acl_table()
-    end
+    quote do: Bonfire.Data.AccessControl.Acl.Migration.drop_acl_table()
   end
 
   defmacro migrate_acl() do
