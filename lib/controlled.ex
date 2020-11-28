@@ -7,7 +7,7 @@ defmodule Bonfire.Data.AccessControl.Controlled do
     source: "bonfire_data_access_control_controlled"
 
   alias Bonfire.Data.AccessControl.{Acl, Controlled}
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Changesets
 
   mixin_schema do
     belongs_to :acl, Acl
@@ -43,7 +43,7 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
 
   # drop_controlled_table/0
 
-  def drop_controlled_table(), do: drop_pointable_table(Acl)
+  def drop_controlled_table(), do: drop_mixin_table(Controlled)
 
   # create_controlled_acl_index/{0, 1}
 
@@ -63,15 +63,15 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
   end
 
 
-  # migrate_acl/{0,1}
+  # migrate_controlled/{0,1}
 
-  defp mac(:up) do
+  defp mc(:up) do
     quote do
       unquote(make_controlled_table([]))
       unquote(make_controlled_acl_index([]))
     end      
   end
-  defp mac(:down) do
+  defp mc(:down) do
     quote do
       Bonfire.Data.AccessControl.Controlled.Migration.drop_controlled_acl_index()
       Bonfire.Data.AccessControl.Controlled.Migration.drop_controlled_table()
@@ -81,10 +81,10 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
   defmacro migrate_controlled() do
     quote do
       if Ecto.Migration.direction() == :up,
-        do: unquote(mac(:up)),
-        else: unquote(mac(:down))
+        do: unquote(mc(:up)),
+        else: unquote(mc(:down))
     end
   end
-  defmacro migrate_controlled(dir), do: mac(dir)
+  defmacro migrate_controlled(dir), do: mc(dir)
 
 end

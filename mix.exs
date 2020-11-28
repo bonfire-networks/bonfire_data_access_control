@@ -22,14 +22,10 @@ defmodule Bonfire.Data.AccessControl.MixProject do
         main: "readme", # The first page to display from the docs 
         extras: ["README.md"], # extra pages to include
       ],
-      deps: deps()
+      deps: Mess.deps [{:ex_doc, ">= 0.0.0", only: :dev, runtime: false}]
     ]
   end
 
   def application, do: [ extra_applications: [:logger] ]
-
-  defp deps do
-    Mess.deps [{:ex_doc, ">= 0.0.0", only: :dev, runtime: false}]
-  end
 
 end
