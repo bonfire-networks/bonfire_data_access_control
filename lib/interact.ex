@@ -13,6 +13,7 @@ defmodule Bonfire.Data.AccessControl.Interact do
   pointable_schema do
     belongs_to :access, Access
     belongs_to :verb, Verb
+    field :value, :boolean
   end
 
   def changeset(interact \\ %Interact{}, attrs, opts \\ []),
@@ -38,6 +39,7 @@ defmodule Bonfire.Data.AccessControl.Interact.Migration do
           Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Access), null: false
         Ecto.Migration.add :verb_id,
           Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb), null: false
+        Ecto.Migration.add :value, :boolean
         unquote_splicing(exprs)
       end
     end

@@ -7,10 +7,11 @@ defmodule Bonfire.Data.AccessControl.Acl do
     table_id: "11STSPERM1TTED1NTERACT10NS",
     source: "bonfire_data_access_control_acl"
 
-  alias Bonfire.Data.AccessControl.Acl
+  alias Bonfire.Data.AccessControl.{Acl, Grant}
   alias Pointers.Changesets
 
   pointable_schema do
+    has_many :grants, Grant
   end
 
   def changeset(acl \\ %Acl{}, attrs, opts \\ []),

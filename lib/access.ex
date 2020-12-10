@@ -7,10 +7,11 @@ defmodule Bonfire.Data.AccessControl.Access do
     table_id: "ABVNCH0FPERM1SS10NS1NA11ST",
     source: "bonfire_data_access_control_access"
 
-  alias Bonfire.Data.AccessControl.Access
+  alias Bonfire.Data.AccessControl.{Access, Interact}
   alias Pointers.Changesets
 
   pointable_schema do
+    has_many :interacts, Interact
   end
 
   def changeset(access \\ %Access{}, attrs, opts \\ []),
