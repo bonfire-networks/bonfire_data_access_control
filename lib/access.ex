@@ -8,14 +8,15 @@ defmodule Bonfire.Data.AccessControl.Access do
     source: "bonfire_data_access_control_access"
 
   alias Bonfire.Data.AccessControl.{Access, Interact}
-  alias Pointers.Changesets
+  alias Ecto.Changeset
 
   pointable_schema do
     has_many :interacts, Interact
   end
 
-  def changeset(access \\ %Access{}, attrs, opts \\ []),
-    do: Changesets.auto(access, attrs, opts, [])
+  def changeset(access \\ %Access{}, params) do
+    Changeset.cast(access, params, [])
+  end
  
 end
 defmodule Bonfire.Data.AccessControl.Access.Migration do

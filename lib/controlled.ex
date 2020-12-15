@@ -7,14 +7,18 @@ defmodule Bonfire.Data.AccessControl.Controlled do
     source: "bonfire_data_access_control_controlled"
 
   alias Bonfire.Data.AccessControl.{Acl, Controlled}
-  alias Pointers.Changesets
+  alias Ecto.Changeset
 
   mixin_schema do
     belongs_to :acl, Acl
   end
 
-  def changeset(acl \\ %Acl{}, attrs, opts \\ []),
-    do: Changesets.auto(acl, attrs, opts, [])
+  def changeset(controlled \\ %Controlled{}, params) do
+    controlled
+    |> Changeset.cast(params, [:acl_id])
+    |> Changeset.validate_required([:acl_id])
+    |> Changeset.assoc_constraint(:acl)
+  end
  
 end
 defmodule Bonfire.Data.AccessControl.Controlled.Migration do

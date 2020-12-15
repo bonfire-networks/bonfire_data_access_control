@@ -8,7 +8,8 @@ defmodule Bonfire.Data.AccessControl.Grant do
     source: "bonfire_data_access_control_grant"
 
   alias Bonfire.Data.AccessControl.{Acl, Access, Grant}
-  alias Pointers.{Changesets, Pointer}
+  alias Ecto.Changeset
+  alias Pointers.Pointer
 
   pointable_schema do
     belongs_to :subject, Pointer
@@ -16,9 +17,18 @@ defmodule Bonfire.Data.AccessControl.Grant do
     belongs_to :acl, Acl
   end
 
-  def changeset(grant \\ %Grant{}, attrs, opts \\ []),
-    do: Changesets.auto(grant, attrs, opts, [])
- 
+  @cast [:subject_id, :access_id, :acl_id]
+  @required @cast
+
+  def changeset(grant \\ %Grant{}, params) do
+    grant
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
+    |> Changeset.assoc_constraint(:subject)
+    |> Changeset.assoc_constraint(:access)
+    |> Changeset.assoc_constraint(:acl)
+  end
+
 end
 defmodule Bonfire.Data.AccessControl.Grant.Migration do
 

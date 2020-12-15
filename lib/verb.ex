@@ -8,7 +8,7 @@ defmodule Bonfire.Data.AccessControl.Verb do
     source: "bonfire_data_access_control_verb"
 
   alias Bonfire.Data.AccessControl.Verb
-  alias Pointers.Changesets
+  alias Ecto.Changeset
 
   pointable_schema do
     field :verb, :string
@@ -16,8 +16,11 @@ defmodule Bonfire.Data.AccessControl.Verb do
 
   @default_opts [cast: [:verb], required: [:verb]]
 
-  def changeset(verb \\ %Verb{}, attrs, opts \\ []),
-    do: Changesets.auto(verb, attrs, opts, [])
+  def changeset(verb \\ %Verb{}, params) do
+    verb
+    |> Changeset.cast(params, [:verb])
+    |> Changeset.validate_required([:verb])
+  end
  
 end
 defmodule Bonfire.Data.AccessControl.Verb.Migration do

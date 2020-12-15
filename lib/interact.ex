@@ -8,7 +8,8 @@ defmodule Bonfire.Data.AccessControl.Interact do
     source: "bonfire_data_access_control_interact"
 
   alias Bonfire.Data.AccessControl.{Access, Interact, Verb}
-  alias Pointers.{Changesets, Pointer}
+  alias Ecto.Changeset
+  alias Pointers.Pointer
 
   pointable_schema do
     belongs_to :access, Access
@@ -16,9 +17,16 @@ defmodule Bonfire.Data.AccessControl.Interact do
     field :value, :boolean
   end
 
-  def changeset(interact \\ %Interact{}, attrs, opts \\ []),
-    do: Changesets.auto(interact, attrs, opts, [])
- 
+  @cast     [:access_id, :verb_id, :value]
+  @required [:access_id, :verb_id, :value]
+  def changeset(interact \\ %Interact{}, params) do
+    interact
+    |> Changeset.cast(params, @cast)
+    |> Changeset.validate_required(@required)
+    |> Changeset.assoc_constraint(:access)
+    |> Changeset.assoc_constraint(:verb)
+  end
+
 end
 defmodule Bonfire.Data.AccessControl.Interact.Migration do
 
