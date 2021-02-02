@@ -20,8 +20,9 @@ defmodule Bonfire.Data.AccessControl.Verb do
     verb
     |> Changeset.cast(params, [:verb])
     |> Changeset.validate_required([:verb])
+    |> Changeset.unique_constraint([:verb])
   end
- 
+
 end
 defmodule Bonfire.Data.AccessControl.Verb.Migration do
 
@@ -74,7 +75,7 @@ defmodule Bonfire.Data.AccessControl.Verb.Migration do
       unquote(make_verb_verb_index([]))
     end
   end
-      
+
   defp mv(:down) do
     quote do
       Bonfire.Data.AccessControl.Verb.Migration.drop_verb_verb_index()
