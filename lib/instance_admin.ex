@@ -12,12 +12,12 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin do
     field :is_instance_admin, :boolean
   end
 
-  def changeset(admin \\ %InstanceAdmin{}, params) do
+  def changeset(admin \\ %InstanceAdmin{}, params, cast \\ [:is_instance_admin]) do
     admin
-    |> Changeset.cast(params, [:is_instance_admin])
+    |> Changeset.cast(params, cast)
     |> Changeset.validate_required([:is_instance_admin])
   end
- 
+
 end
 defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
 
