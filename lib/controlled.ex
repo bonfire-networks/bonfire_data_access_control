@@ -15,11 +15,11 @@ defmodule Bonfire.Data.AccessControl.Controlled do
 
   def changeset(controlled \\ %Controlled{}, params) do
     controlled
-    |> Changeset.cast(params, [:acl_id])
+    |> Changeset.cast(params, [:id, :acl_id])
     |> Changeset.validate_required([:acl_id])
     |> Changeset.assoc_constraint(:acl)
   end
- 
+
 end
 defmodule Bonfire.Data.AccessControl.Controlled.Migration do
 
@@ -73,7 +73,7 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
     quote do
       unquote(make_controlled_table([]))
       unquote(make_controlled_acl_index([]))
-    end      
+    end
   end
   defp mc(:down) do
     quote do
