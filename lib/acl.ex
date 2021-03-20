@@ -7,17 +7,18 @@ defmodule Bonfire.Data.AccessControl.Acl do
     table_id: "11STSPERM1TTED1NTERACT10NS",
     source: "bonfire_data_access_control_acl"
 
-  alias Bonfire.Data.AccessControl.{Acl, Grant}
+  alias Bonfire.Data.AccessControl.{Acl, Grant, Controlled}
   alias Ecto.Changeset
 
   pointable_schema do
     has_many :grants, Grant
+    has_many :controlled, Controlled
   end
 
   def changeset(acl \\ %Acl{}, params) do
     Changeset.cast(acl, params, [])
   end
- 
+
 end
 defmodule Bonfire.Data.AccessControl.Acl.Migration do
 

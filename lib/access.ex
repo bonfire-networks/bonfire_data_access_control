@@ -11,13 +11,14 @@ defmodule Bonfire.Data.AccessControl.Access do
   alias Ecto.Changeset
 
   pointable_schema do
+    has_many :grants, Grant
     has_many :interacts, Interact
   end
 
   def changeset(access \\ %Access{}, params) do
     Changeset.cast(access, params, [])
   end
- 
+
 end
 defmodule Bonfire.Data.AccessControl.Access.Migration do
 
