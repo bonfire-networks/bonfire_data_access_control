@@ -13,10 +13,12 @@ defmodule Bonfire.Data.AccessControl.Access do
   pointable_schema do
     has_many :grants, Grant
     has_many :interacts, Interact
+    field :can_see, :boolean
+    field :can_read, :boolean
   end
 
   def changeset(access \\ %Access{}, params) do
-    Changeset.cast(access, params, [])
+    Changeset.cast(access, params, [:can_see, :can_read])
   end
 
 end
@@ -33,6 +35,8 @@ defmodule Bonfire.Data.AccessControl.Access.Migration do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.AccessControl.Access) do
         unquote_splicing(exprs)
+        Ecto.Migration.add :can_see, :boolean
+        Ecto.Migration.add :can_read, :boolean
       end
     end
   end
