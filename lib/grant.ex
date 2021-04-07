@@ -19,6 +19,7 @@ defmodule Bonfire.Data.AccessControl.Grant do
 
   @cast [:subject_id, :access_id, :acl_id]
   @required @cast
+  @unique_index [:acl_id, :subject_id, :access_id]
 
   def changeset(grant \\ %Grant{}, params) do
     grant
@@ -27,6 +28,7 @@ defmodule Bonfire.Data.AccessControl.Grant do
     |> Changeset.assoc_constraint(:subject)
     |> Changeset.assoc_constraint(:access)
     |> Changeset.assoc_constraint(:acl)
+    |> Changeset.unique_constraint(@unique_index)
   end
 
 end
