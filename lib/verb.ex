@@ -14,7 +14,7 @@ defmodule Bonfire.Data.AccessControl.Verb do
     field :verb, :string
   end
 
-  @default_opts [cast: [:verb], required: [:verb]]
+  # @default_opts [cast: [:verb], required: [:verb]]
 
   def changeset(verb \\ %Verb{}, params) do
     verb

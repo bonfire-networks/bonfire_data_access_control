@@ -9,7 +9,7 @@ defmodule Bonfire.Data.AccessControl.Interact do
 
   alias Bonfire.Data.AccessControl.{Access, Interact, Verb}
   alias Ecto.Changeset
-  alias Pointers.Pointer
+  # alias Pointers.Pointer
 
   pointable_schema do
     belongs_to :access, Access

@@ -25,7 +25,7 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.InstanceAdmin
 
-  @instance_admin_table InstanceAdmin.__schema__(:source)
+  # @instance_admin_table InstanceAdmin.__schema__(:source)
 
   # create_instance_admin_table/{0,1}
 
