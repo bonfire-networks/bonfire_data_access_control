@@ -4,7 +4,7 @@ defmodule Bonfire.Data.AccessControl.Grant do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_access_control,
-    table_id: "GRANTSS0MEACCESST0ASVBJECT",
+    table_id: "0RANTSS0MEACCESST0ASVBJECT",
     source: "bonfire_data_access_control_grant"
 
   alias Bonfire.Data.AccessControl.{Acl, Access, Grant}

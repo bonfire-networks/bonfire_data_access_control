@@ -4,7 +4,7 @@ defmodule Bonfire.Data.AccessControl.Interact do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_access_control,
-    table_id: "M0RETHANJVSTREAD0N1YACCESS",
+    table_id: "40RETHANJVSTREAD0N1YACCESS",
     source: "bonfire_data_access_control_interact"
 
   alias Bonfire.Data.AccessControl.{Access, Interact, Verb}

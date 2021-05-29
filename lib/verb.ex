@@ -4,7 +4,7 @@ defmodule Bonfire.Data.AccessControl.Verb do
 
   use Pointers.Pointable,
     otp_app: :bonfire_data_access_control,
-    table_id: "AW0RDDESCR1B1NGD01NGTH1NGS",
+    table_id: "2W0RDDESCR1B1NGD01NGTH1NGS",
     source: "bonfire_data_access_control_verb"
 
   alias Bonfire.Data.AccessControl.Verb
