@@ -18,7 +18,7 @@ defmodule Bonfire.Data.AccessControl.Verbs do
   world garbage collection of all processes and the copying of the
   entire cache to each process that has queried it since its last
   local garbage collection.
-  """  
+  """
   alias Bonfire.Data.AccessControl.Verb
 
   use GenServer, restart: :transient
@@ -54,7 +54,7 @@ defmodule Bonfire.Data.AccessControl.Verbs do
   @spec id!(query) :: integer()
   @doc "Look up a verb id by id, name or schema, throw :not_found if not found."
   def id!(query) when is_atom(query) or is_binary(query), do: id!(query, data())
-    
+
   @spec ids!([binary | atom]) :: [binary]
   @doc "Look up many ids at once, throw :not_found if any of them are not found"
   def ids!(ids) do
@@ -86,10 +86,10 @@ defmodule Bonfire.Data.AccessControl.Verbs do
   defp search_path(), do: Application.fetch_env!(:bonfire_data_access_control, :search_path)
 
   # called by init/1
-  defp declares_verbs?(module), do: function_exported?(module, :verbs, 0)
+  defp declares_verbs?(module), do: function_exported?(module, :declare_verbs, 0)
 
   # called by init/1
-  defp index(mod, acc), do: index(mod, acc, mod.verbs())
+  defp index(mod, acc), do: index(mod, acc, mod.declare_verbs())
 
   # called by index/2
   defp index(mod, acc, verbs) do
