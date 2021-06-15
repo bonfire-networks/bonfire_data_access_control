@@ -5,10 +5,10 @@ defmodule Bonfire.Data.AccessControl.Verbs do
 
   Use of the Verbs Service requires:
 
-  1. Exporting `verbs/0` in relevant modules, returning a keylist of
+  1. Exporting `declare_verbs/0` in relevant modules, returning a keylist of
      name and (pointer) id.
-  2. Start `Bonfire.Data.AccessControl.Verbs` before querying.
-  3. To populate the search path with otp application.
+  2. To populate `:bonfire_data_access_control, :search_path` in config the list of OTP applications where verbs are declared.
+  3. Start the `Bonfire.Data.AccessControl.Verbs` application before querying.
   4. OTP 21.2 or greater, though we recommend using the most recent
      release available.
 
@@ -49,7 +49,7 @@ defmodule Bonfire.Data.AccessControl.Verbs do
 
   @spec id(query) :: {:ok, integer()} | {:error, :not_found}
   @doc "Look up a verb id by id, name or schema."
-  def id(query), do: with( {:ok, val} <- verb(query), do: {:ok, val.id})
+  def id(query), do: with( {:ok, %{id: id}} <- verb(query), do: {:ok, id})
 
   @spec id!(query) :: integer()
   @doc "Look up a verb id by id, name or schema, throw :not_found if not found."

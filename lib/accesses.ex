@@ -8,7 +8,7 @@ defmodule Bonfire.Data.AccessControl.Accesses do
   1. Exporting `accesses/0` in relevant modules, returning a keylist of
      name and (pointer) id.
   2. Start `Bonfire.Data.AccessControl.Accesses` before querying.
-  3. To populate the search path with otp application.
+  3. To populate `:bonfire_data_access_control, :search_path` in config the list of OTP applications where acceses are declared.
   4. OTP 21.2 or greater, though we recommend using the most recent
      release available.
 
@@ -18,7 +18,7 @@ defmodule Bonfire.Data.AccessControl.Accesses do
   world garbage collection of all processes and the copying of the
   entire cache to each process that has queried it since its last
   local garbage collection.
-  """  
+  """
   alias Bonfire.Data.AccessControl.Access
 
   use GenServer, restart: :transient
@@ -54,7 +54,7 @@ defmodule Bonfire.Data.AccessControl.Accesses do
   @spec id!(query) :: integer()
   @doc "Look up a access id by id, name or schema, throw :not_found if not found."
   def id!(query) when is_atom(query) or is_binary(query), do: id!(query, data())
-    
+
   @spec ids!([binary | atom]) :: [binary]
   @doc "Look up many ids at once, throw :not_found if any of them are not found"
   def ids!(ids) do
