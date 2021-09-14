@@ -86,7 +86,7 @@ defmodule Bonfire.Data.AccessControl.Verbs do
   defp search_path(), do: Application.fetch_env!(:bonfire_data_access_control, :search_path)
 
   # called by init/1
-  defp declares_verbs?(module), do: function_exported?(module, :declare_verbs, 0)
+  defp declares_verbs?(module), do: Code.ensure_loaded?(module) and function_exported?(module, :declare_verbs, 0)
 
   # called by init/1
   defp index(mod, acc), do: index(mod, acc, mod.declare_verbs())
