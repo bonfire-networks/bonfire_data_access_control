@@ -1,11 +1,10 @@
-Code.eval_file("mess.exs")
 defmodule Bonfire.Data.AccessControl.MixProject do
   use Mix.Project
 
   def project do
     [
       app: :bonfire_data_access_control,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       description: "Access Control models for commonspub",
@@ -22,10 +21,16 @@ defmodule Bonfire.Data.AccessControl.MixProject do
         main: "readme", # The first page to display from the docs
         extras: ["README.md"], # extra pages to include
       ],
-      deps: Mess.deps [{:ex_doc, ">= 0.0.0", only: :dev, runtime: false}]
+      deps: deps()
     ]
   end
 
   def application, do: [ extra_applications: [:logger] ]
+
+  defp deps do
+    [
+      {:pointers, [env: :prod, git: "https://github.com/bonfire-networks/pointers", branch: "main", override: true]}
+    ]
+  end
 
 end
