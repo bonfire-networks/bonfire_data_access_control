@@ -1,4 +1,4 @@
-# bonfire\_data\_access\_control
+# Bonfire.Data.AccessControl
 
 ## Copyright and License
 
