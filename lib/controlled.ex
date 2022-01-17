@@ -36,7 +36,7 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
       require Pointers.Migration
       Pointers.Migration.create_mixin_table(Bonfire.Data.AccessControl.Controlled) do
         Ecto.Migration.add :acl_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl), null: false
+          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl), primary_key: true
         unquote_splicing(exprs)
       end
     end

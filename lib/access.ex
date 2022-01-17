@@ -7,18 +7,19 @@ defmodule Bonfire.Data.AccessControl.Access do
     table_id: "2BVNCH0FPERM1SS10NS1NA11ST",
     source: "bonfire_data_access_control_access"
 
-  alias Bonfire.Data.AccessControl.{Access, Interact}
-  alias Ecto.Changeset
+  alias Bonfire.Data.AccessControl.{Access, Grant, Verb}
 
   pointable_schema do
     has_many :grants, Grant
-    has_many :interacts, Interact
-    field :can_see, :boolean
-    field :can_read, :boolean
+    belongs_to :verb, Verb
+    field :value, :boolean
   end
 
+  @cast [:verb_id, :value]
+
   def changeset(access \\ %Access{}, params) do
-    Changeset.cast(access, params, [:can_see, :can_read])
+    Changeset.cast(access, params, @cast)
+    |> Changeset.validate_required(@cast)
   end
 
 end
@@ -34,9 +35,11 @@ defmodule Bonfire.Data.AccessControl.Access.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.AccessControl.Access) do
+        Ecto.Migration.add :verb_id,
+          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb), null: false
+        Ecto.Migration.add :value, :boolean
         unquote_splicing(exprs)
-        Ecto.Migration.add :can_see, :boolean
-        Ecto.Migration.add :can_read, :boolean
+
       end
     end
   end

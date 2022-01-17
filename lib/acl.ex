@@ -1,5 +1,12 @@
 defmodule Bonfire.Data.AccessControl.Acl do
   @moduledoc """
+  Conceptually, a complete list of all permissions for everybody.
+
+  In practice, it's a partial specification and anything not
+  explicitly granted is assumed to be denied.
+
+  Can be reused to secure multiple objects, thus exists independently
+  of any object.
   """
 
   use Pointers.Pointable,
@@ -7,7 +14,7 @@ defmodule Bonfire.Data.AccessControl.Acl do
     table_id: "11STSPERM1TTED1NTERACT10NS",
     source: "bonfire_data_access_control_acl"
 
-  alias Bonfire.Data.AccessControl.{Acl, Grant, Controlled}
+  alias Bonfire.Data.AccessControl.{Acl, Grant, Controlled, Stereotype}
   alias Ecto.Changeset
 
   pointable_schema do
@@ -15,9 +22,7 @@ defmodule Bonfire.Data.AccessControl.Acl do
     has_many :controlled, Controlled
   end
 
-  def changeset(acl \\ %Acl{}, params) do
-    Changeset.cast(acl, params, [])
-  end
+  def changeset(acl \\ %Acl{}, params), do: Changeset.cast(params, [])
 
 end
 defmodule Bonfire.Data.AccessControl.Acl.Migration do
