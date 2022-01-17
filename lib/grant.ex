@@ -7,27 +7,28 @@ defmodule Bonfire.Data.AccessControl.Grant do
     table_id: "0RANTSS0MEACCESST0ASVBJECT",
     source: "bonfire_data_access_control_grant"
 
-  alias Bonfire.Data.AccessControl.{Acl, Access, Grant}
+  alias Bonfire.Data.AccessControl.{Acl, Grant, Verb}
   alias Ecto.Changeset
   alias Pointers.Pointer
 
   pointable_schema do
-    belongs_to :subject, Pointer
-    belongs_to :access, Access
     belongs_to :acl, Acl
+    belongs_to :subject, Pointer 
+    belongs_to :verb, Verb
+    field :value, :boolean
   end
 
-  @cast [:subject_id, :access_id, :acl_id]
+  @unique_index [:acl_id, :subject_id, :verb_id]
+  @cast [:acl_id, :subject_id, :verb_id, :value]
   @required @cast
-  @unique_index [:acl_id, :subject_id, :access_id]
 
   def changeset(grant \\ %Grant{}, params) do
     grant
     |> Changeset.cast(params, @cast)
     |> Changeset.validate_required(@required)
-    |> Changeset.assoc_constraint(:subject)
-    |> Changeset.assoc_constraint(:access)
     |> Changeset.assoc_constraint(:acl)
+    |> Changeset.assoc_constraint(:subject)
+    |> Changeset.assoc_constraint(:verb)
     |> Changeset.unique_constraint(@unique_index)
   end
 
@@ -39,7 +40,7 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   alias Bonfire.Data.AccessControl.Grant
 
   @grant_table Grant.__schema__(:source)
-  @unique_index [:acl_id, :subject_id, :access_id]
+  @unique_index [:acl_id, :subject_id, :verb_id]
 
   # create_grant_table/{0,1}
 
@@ -47,12 +48,13 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
     quote do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(Bonfire.Data.AccessControl.Grant) do
-        Ecto.Migration.add :subject_id,
-          Pointers.Migration.strong_pointer(), null: false
-        Ecto.Migration.add :access_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Access), null: false
         Ecto.Migration.add :acl_id,
           Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl), null: false
+        Ecto.Migration.add :subject_id,
+          Pointers.Migration.strong_pointer(), null: false
+        Ecto.Migration.add :verb_id,
+          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb), null: false
+        Ecto.Migration.add :value, :boolean
         unquote_splicing(exprs)
       end
     end
@@ -81,51 +83,16 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   def drop_grant_unique_index(opts \\ [])
   def drop_grant_unique_index(opts), do: drop_if_exists(unique_index(@grant_table, @unique_index, opts))
 
-  defp make_grant_subject_index(opts) do
-    quote do
-      Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@grant_table), [:subject_id], unquote(opts))
-      )
-    end
-  end
-
-  defp make_grant_access_index(opts) do
-    quote do
-      Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@grant_table), [:access_id], unquote(opts))
-      )
-    end
-  end
-
-  defmacro create_grant_subject_index(opts \\ [])
-  defmacro create_grant_subject_index(opts), do: make_grant_subject_index(opts)
-
-  defmacro create_grant_access_index(opts \\ [])
-  defmacro create_grant_access_index(opts), do: make_grant_access_index(opts)
-
-  def drop_grant_subject_index(opts \\ []) do
-      drop_if_exists(index(@grant_table, [:subject_id], opts))
-  end
-
-  def drop_grant_access_index(opts \\ []) do
-      drop_if_exists(index(@grant_table, [:access_id], opts))
-  end
-
-
   # migrate_grant/{0,1}
 
   defp mg(:up) do
     quote do
       unquote(make_grant_table([]))
       unquote(make_grant_unique_index([]))
-      unquote(make_grant_subject_index([]))
-      unquote(make_grant_access_index([]))
     end
   end
   defp mg(:down) do
     quote do
-      Bonfire.Data.AccessControl.Grant.Migration.drop_grant_access_index()
-      Bonfire.Data.AccessControl.Grant.Migration.drop_grant_subject_index()
       Bonfire.Data.AccessControl.Grant.Migration.drop_grant_unique_index()
       Bonfire.Data.AccessControl.Grant.Migration.drop_grant_table()
     end
