@@ -16,8 +16,15 @@ defmodule Bonfire.Data.AccessControl.Controlled do
   def changeset(controlled \\ %Controlled{}, params) do
     controlled
     |> Changeset.cast(params, [:id, :acl_id])
-    |> Changeset.validate_required([:acl_id])
+    |> Changeset.cast_assoc(:acl)
     |> Changeset.assoc_constraint(:acl)
+    |> maybe_ignore()
+  end
+
+  defp maybe_ignore(changeset) do
+    if Changeset.get_field(:acl_id) || Changeset.get_field(:acl),
+      do: changeset,
+      else: Changeset.apply_action(changeset, :ignore)
   end
 
 end
