@@ -16,7 +16,7 @@ defmodule Bonfire.Data.AccessControl.Controlled do
   def changeset(controlled \\ %Controlled{}, params) do
     controlled
     |> Changeset.cast(params, [:id, :acl_id])
-    |> Changeset.cast_assoc(:acl)
+    |> Changeset.cast_assoc(:acl, with: &Acl.changeset/2)
     |> Changeset.assoc_constraint(:acl)
     |> maybe_ignore()
   end
