@@ -22,7 +22,9 @@ defmodule Bonfire.Data.AccessControl.Acl do
     has_many :controlled, Controlled
   end
 
-  def changeset(acl \\ %Acl{}, params), do: acl |> Changeset.cast(params, [])
+  def changeset(acl \\ %Acl{}, params), do: acl
+    |> Changeset.cast(params, [])
+    |> Changeset.cast_assoc(:grants, with: &Grant.changeset/2)
 
 end
 defmodule Bonfire.Data.AccessControl.Acl.Migration do
