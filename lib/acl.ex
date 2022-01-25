@@ -14,7 +14,7 @@ defmodule Bonfire.Data.AccessControl.Acl do
     table_id: "11STSPERM1TTED1NTERACT10NS",
     source: "bonfire_data_access_control_acl"
 
-  alias Bonfire.Data.AccessControl.{Acl, Grant, Controlled, Stereotype}
+  alias Bonfire.Data.AccessControl.{Acl, Grant, Controlled}
   alias Ecto.Changeset
 
   pointable_schema do
