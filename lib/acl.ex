@@ -1,8 +1,7 @@
 defmodule Bonfire.Data.AccessControl.Acl do
   @moduledoc """
   Conceptually, a complete list of all permissions for everybody.
-
-  In practice, it's a partial specification and anything not
+  In practice, it's a partial specification, and anything not
   explicitly granted is assumed to be denied.
 
   Can be reused to secure multiple objects, thus exists independently
