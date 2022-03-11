@@ -9,6 +9,7 @@ defmodule Bonfire.Data.AccessControl.Verb do
 
   alias Bonfire.Data.AccessControl.Verb
   alias Ecto.Changeset
+  alias Pointers.Changesets
 
   pointable_schema do
     field :verb, :string
@@ -18,7 +19,7 @@ defmodule Bonfire.Data.AccessControl.Verb do
 
   def changeset(verb \\ %Verb{}, params) do
     verb
-    |> Changeset.cast(params, [:verb])
+    |> Changesets.cast(params, [:verb])
     |> Changeset.validate_required([:verb])
     |> Changeset.unique_constraint([:verb])
   end

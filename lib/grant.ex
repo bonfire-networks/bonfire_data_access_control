@@ -9,6 +9,7 @@ defmodule Bonfire.Data.AccessControl.Grant do
 
   alias Bonfire.Data.AccessControl.{Acl, Grant, Verb}
   alias Ecto.Changeset
+  alias Pointers.Changesets
   alias Pointers.Pointer
 
   pointable_schema do
@@ -24,7 +25,7 @@ defmodule Bonfire.Data.AccessControl.Grant do
 
   def changeset(grant \\ %Grant{}, params) do
     grant
-    |> Changeset.cast(params, @cast)
+    |> Changesets.cast(params, @cast)
     |> Changeset.validate_required(@required)
     |> Changeset.assoc_constraint(:acl)
     |> Changeset.assoc_constraint(:subject)

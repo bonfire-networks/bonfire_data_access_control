@@ -8,15 +8,13 @@ defmodule Bonfire.Data.AccessControl.Circle do
     source: "bonfire_data_access_control_circle"
 
   alias Bonfire.Data.AccessControl.{Circle, Encircle}
-  alias Ecto.Changeset
+  alias Pointers.Changesets
 
   virtual_schema do
     has_many :encircles, Encircle, on_replace: :delete_if_exists
   end
 
-  def changeset(circle \\ %Circle{}, params) do
-    Changeset.cast(circle, params, [])
-  end
+  def changeset(circle \\ %Circle{}, params), do: Changesets.cast(circle, params, [])
 
 end
 defmodule Bonfire.Data.AccessControl.Circle.Migration do

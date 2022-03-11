@@ -14,16 +14,14 @@ defmodule Bonfire.Data.AccessControl.Acl do
     source: "bonfire_data_access_control_acl"
 
   alias Bonfire.Data.AccessControl.{Acl, Grant, Controlled}
-  alias Ecto.Changeset
+  alias Pointers.Changesets
 
   pointable_schema do
     has_many :grants, Grant
     has_many :controlled, Controlled
   end
 
-  def changeset(acl \\ %Acl{}, params), do: acl
-    |> Changeset.cast(params, [])
-    |> Changeset.cast_assoc(:grants, with: &Grant.changeset/2)
+  def changeset(acl \\ %Acl{}, params), do: Changesets.cast(acl, params, [])
 
 end
 defmodule Bonfire.Data.AccessControl.Acl.Migration do
