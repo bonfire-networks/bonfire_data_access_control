@@ -10,7 +10,7 @@ defmodule Bonfire.Data.AccessControl.Controlled do
   alias Ecto.Changeset
 
   mixin_schema do
-    belongs_to :acl, Acl
+    belongs_to :acl, Acl, primary_key: true
   end
 
   def changeset(controlled \\ %Controlled{}, params) do
