@@ -17,8 +17,8 @@ defmodule Bonfire.Data.AccessControl.Encircle do
   end
 
   @cast     [:subject_id, :circle_id]
-  @required [:circle_id]
-  @unique_index [:subject_id, :circle_id]
+  @required @cast
+  @unique_index @cast
 
   def changeset(encircle \\ %Encircle{}, params) do
     encircle
@@ -62,9 +62,9 @@ defmodule Bonfire.Data.AccessControl.Encircle.Migration do
 
   def migrate_encircle_unique_index(dir \\ direction(), opts \\ [])
   def migrate_encircle_unique_index(:up, opts),
-    do: create_if_not_exists(index(@encircle_table, @unique_index, opts))
+    do: create_if_not_exists(unique_index(@encircle_table, @unique_index, opts))
   def migrate_encircle_unique_index(:down, opts),
-    do: drop_if_exists(index(@encircle_table, @unique_index, opts))
+    do: drop_if_exists(unique_index(@encircle_table, @unique_index, opts))
 
   def migrate_encircle_circle_index(dir \\ direction(), opts \\ [])
   def migrate_encircle_circle_index(:up, opts),
