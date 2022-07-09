@@ -8,6 +8,7 @@ defmodule Bonfire.Data.AccessControl.Circle do
 
   alias Bonfire.Data.AccessControl.{Circle, Encircle}
   alias Pointers.Changesets
+  alias Pointers.Pointer
 
   virtual_schema do
     has_many :encircles, Encircle, on_replace: :delete_if_exists
