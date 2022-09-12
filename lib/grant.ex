@@ -7,16 +7,19 @@ defmodule Bonfire.Data.AccessControl.Grant do
     table_id: "0RANTSS0MEACCESST0ASVBJECT",
     source: "bonfire_data_access_control_grant"
 
-  alias Bonfire.Data.AccessControl.{Acl, Grant, Verb}
+  alias Bonfire.Data.AccessControl.Acl
+  alias Bonfire.Data.AccessControl.Grant
+  alias Bonfire.Data.AccessControl.Verb
+
   alias Ecto.Changeset
   alias Pointers.Changesets
   alias Pointers.Pointer
 
   pointable_schema do
-    belongs_to :acl, Acl
-    belongs_to :subject, Pointer 
-    belongs_to :verb, Verb
-    field :value, :boolean
+    belongs_to(:acl, Acl)
+    belongs_to(:subject, Pointer)
+    belongs_to(:verb, Verb)
+    field(:value, :boolean)
   end
 
   @unique_index [:acl_id, :subject_id, :verb_id]
@@ -32,10 +35,9 @@ defmodule Bonfire.Data.AccessControl.Grant do
     |> Changeset.assoc_constraint(:verb)
     |> Changeset.unique_constraint(@unique_index)
   end
-
 end
-defmodule Bonfire.Data.AccessControl.Grant.Migration do
 
+defmodule Bonfire.Data.AccessControl.Grant.Migration do
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Grant
@@ -48,21 +50,34 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   defp make_grant_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_pointable_table(Bonfire.Data.AccessControl.Grant) do
-        Ecto.Migration.add :acl_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl), null: false
-        Ecto.Migration.add :subject_id,
-          Pointers.Migration.strong_pointer(), null: false
-        Ecto.Migration.add :verb_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb), null: false
-        Ecto.Migration.add :value, :boolean
+
+      Pointers.Migration.create_pointable_table Bonfire.Data.AccessControl.Grant do
+        Ecto.Migration.add(
+          :acl_id,
+          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl),
+          null: false
+        )
+
+        Ecto.Migration.add(
+          :subject_id,
+          Pointers.Migration.strong_pointer(),
+          null: false
+        )
+
+        Ecto.Migration.add(
+          :verb_id,
+          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
+          null: false
+        )
+
+        Ecto.Migration.add(:value, :boolean)
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_grant_table(), do: make_grant_table([])
-  defmacro create_grant_table([do: {_, _, body}]), do: make_grant_table(body)
+  defmacro create_grant_table(do: {_, _, body}), do: make_grant_table(body)
 
   # drop_grant_table/0
 
@@ -73,7 +88,11 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   defp make_grant_unique_index(opts) do
     quote do
       Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.unique_index(unquote(@grant_table), unquote(@unique_index), unquote(opts))
+        Ecto.Migration.unique_index(
+          unquote(@grant_table),
+          unquote(@unique_index),
+          unquote(opts)
+        )
       )
     end
   end
@@ -82,7 +101,9 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   defmacro create_grant_unique_index(opts), do: make_grant_unique_index(opts)
 
   def drop_grant_unique_index(opts \\ [])
-  def drop_grant_unique_index(opts), do: drop_if_exists(unique_index(@grant_table, @unique_index, opts))
+
+  def drop_grant_unique_index(opts),
+    do: drop_if_exists(unique_index(@grant_table, @unique_index, opts))
 
   # migrate_grant/{0,1}
 
@@ -92,6 +113,7 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
       unquote(make_grant_unique_index([]))
     end
   end
+
   defp mg(:down) do
     quote do
       Bonfire.Data.AccessControl.Grant.Migration.drop_grant_unique_index()
@@ -108,5 +130,4 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   end
 
   defmacro migrate_grant(dir), do: mg(dir)
-
 end

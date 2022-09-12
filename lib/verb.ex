@@ -12,7 +12,7 @@ defmodule Bonfire.Data.AccessControl.Verb do
   alias Pointers.Changesets
 
   pointable_schema do
-    field :verb, :string
+    field(:verb, :string)
   end
 
   # @default_opts [cast: [:verb], required: [:verb]]
@@ -23,10 +23,9 @@ defmodule Bonfire.Data.AccessControl.Verb do
     |> Changeset.validate_required([:verb])
     |> Changeset.unique_constraint([:verb])
   end
-
 end
-defmodule Bonfire.Data.AccessControl.Verb.Migration do
 
+defmodule Bonfire.Data.AccessControl.Verb.Migration do
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Verb
@@ -38,15 +37,16 @@ defmodule Bonfire.Data.AccessControl.Verb.Migration do
   defp make_verb_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_pointable_table(Bonfire.Data.AccessControl.Verb) do
-        Ecto.Migration.add :verb, :text, null: false
+
+      Pointers.Migration.create_pointable_table Bonfire.Data.AccessControl.Verb do
+        Ecto.Migration.add(:verb, :text, null: false)
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_verb_table(), do: make_verb_table([])
-  defmacro create_verb_table([do: {_, _, body}]), do: make_verb_table(body)
+  defmacro create_verb_table(do: {_, _, body}), do: make_verb_table(body)
 
   # drop_verb_table/0
 
@@ -57,7 +57,11 @@ defmodule Bonfire.Data.AccessControl.Verb.Migration do
   defp make_verb_verb_index(opts) do
     quote do
       Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.unique_index(unquote(@verb_table), [:verb], unquote(opts))
+        Ecto.Migration.unique_index(
+          unquote(@verb_table),
+          [:verb],
+          unquote(opts)
+        )
       )
     end
   end
@@ -66,7 +70,9 @@ defmodule Bonfire.Data.AccessControl.Verb.Migration do
   defmacro create_verb_verb_index(opts), do: make_verb_verb_index(opts)
 
   def drop_verb_verb_index(opts \\ [])
-  def drop_verb_verb_index(opts), do: drop_if_exists(unique_index(@verb_table, [:verb], opts))
+
+  def drop_verb_verb_index(opts),
+    do: drop_if_exists(unique_index(@verb_table, [:verb], opts))
 
   # migrate_verb/{0,1}
 
@@ -91,6 +97,6 @@ defmodule Bonfire.Data.AccessControl.Verb.Migration do
         else: unquote(mv(:down))
     end
   end
-  defmacro migrate_verb(dir), do: mv(dir)
 
+  defmacro migrate_verb(dir), do: mv(dir)
 end

@@ -34,7 +34,7 @@ defmodule Bonfire.Data.AccessControl.Accesses do
 
   def data(), do: :persistent_term.get(__MODULE__)
 
-  @spec access(query :: query) :: {:ok, Access.t} | {:error, :not_found}
+  @spec access(query :: query) :: {:ok, Access.t()} | {:error, :not_found}
   @doc "Get a Access identified by name or id."
   def access(query) when is_binary(query) or is_atom(query) do
     case Map.get(data(), query) do
@@ -43,13 +43,13 @@ defmodule Bonfire.Data.AccessControl.Accesses do
     end
   end
 
-  @spec access!(query) :: Access.t
+  @spec access!(query) :: Access.t()
   @doc "Look up a Access by name or id, throw :not_found if not found."
   def access!(query), do: Map.get(data(), query) || throw(:not_found)
 
   @spec id(query) :: {:ok, integer()} | {:error, :not_found}
   @doc "Look up a access id by id, name or schema."
-  def id(query), do: with( {:ok, val} <- access(query), do: {:ok, val.id})
+  def id(query), do: with({:ok, val} <- access(query), do: {:ok, val.id})
 
   @spec id!(query) :: integer()
   @doc "Look up a access id by id, name or schema, throw :not_found if not found."
@@ -74,6 +74,7 @@ defmodule Bonfire.Data.AccessControl.Accesses do
       |> Enum.flat_map(&app_modules/1)
       |> Enum.filter(&declares_accesses?/1)
       |> Enum.reduce(%{}, &index/2)
+
     :persistent_term.put(__MODULE__, indexed)
     :ignore
   end
@@ -83,7 +84,8 @@ defmodule Bonfire.Data.AccessControl.Accesses do
   defp app_modules(_, mods), do: mods
 
   # called by init/1
-  defp search_path(), do: Application.fetch_env!(:bonfire_data_access_control, :search_path)
+  defp search_path(),
+    do: Application.fetch_env!(:bonfire_data_access_control, :search_path)
 
   # called by init/1
   defp declares_accesses?(module), do: function_exported?(module, :accesses, 0)
@@ -102,5 +104,4 @@ defmodule Bonfire.Data.AccessControl.Accesses do
     t = %Access{id: id}
     Map.merge(acc, %{id => t, access => t})
   end
-
 end

@@ -9,7 +9,7 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin do
   alias Ecto.Changeset
 
   mixin_schema do
-    field :is_instance_admin, :boolean
+    field(:is_instance_admin, :boolean)
   end
 
   def changeset(admin \\ %InstanceAdmin{}, params, cast \\ [:is_instance_admin]) do
@@ -24,10 +24,9 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin do
       do: changeset,
       else: Changeset.apply_action(changeset, :ignore)
   end
-
 end
-defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
 
+defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.InstanceAdmin
@@ -39,15 +38,22 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
   defp make_instance_admin_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_mixin_table(Bonfire.Data.AccessControl.InstanceAdmin) do
-        Ecto.Migration.add :is_instance_admin, :bool, null: false, default: false
+
+      Pointers.Migration.create_mixin_table Bonfire.Data.AccessControl.InstanceAdmin do
+        Ecto.Migration.add(:is_instance_admin, :bool,
+          null: false,
+          default: false
+        )
+
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_instance_admin_table(), do: make_instance_admin_table([])
-  defmacro create_instance_admin_table([do: {_, _, body}]), do: make_instance_admin_table(body)
+
+  defmacro create_instance_admin_table(do: {_, _, body}),
+    do: make_instance_admin_table(body)
 
   # drop_instance_admin_table/0
 
@@ -56,6 +62,7 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
   # migrate_instance_admin/{0,1}
 
   defp mc(:up), do: make_instance_admin_table([])
+
   defp mc(:down) do
     quote do
       Bonfire.Data.AccessControl.InstanceAdmin.Migration.drop_instance_admin_table()
@@ -69,6 +76,6 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
         else: unquote(mc(:down))
     end
   end
-  defmacro migrate_instance_admin(dir), do: mc(dir)
 
+  defmacro migrate_instance_admin(dir), do: mc(dir)
 end

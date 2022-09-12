@@ -6,11 +6,13 @@ defmodule Bonfire.Data.AccessControl.Controlled do
     otp_app: :bonfire_data_access_control,
     source: "bonfire_data_access_control_controlled"
 
-  alias Bonfire.Data.AccessControl.{Acl, Controlled}
+  alias Bonfire.Data.AccessControl.Acl
+  alias Bonfire.Data.AccessControl.Controlled
+
   alias Ecto.Changeset
 
   mixin_schema do
-    belongs_to :acl, Acl, primary_key: true
+    belongs_to(:acl, Acl, primary_key: true)
   end
 
   def changeset(controlled \\ %Controlled{}, params) do
@@ -22,14 +24,14 @@ defmodule Bonfire.Data.AccessControl.Controlled do
   end
 
   defp maybe_ignore(changeset) do
-    if Changeset.get_field(changeset, :acl_id) || Changeset.get_field(changeset, :acl),
-      do: changeset,
-      else: Changeset.apply_action(changeset, :ignore)
+    if Changeset.get_field(changeset, :acl_id) ||
+         Changeset.get_field(changeset, :acl),
+       do: changeset,
+       else: Changeset.apply_action(changeset, :ignore)
   end
-
 end
-defmodule Bonfire.Data.AccessControl.Controlled.Migration do
 
+defmodule Bonfire.Data.AccessControl.Controlled.Migration do
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Controlled
@@ -41,16 +43,23 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
   defp make_controlled_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_mixin_table(Bonfire.Data.AccessControl.Controlled) do
-        Ecto.Migration.add :acl_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl), primary_key: true
+
+      Pointers.Migration.create_mixin_table Bonfire.Data.AccessControl.Controlled do
+        Ecto.Migration.add(
+          :acl_id,
+          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl),
+          primary_key: true
+        )
+
         unquote_splicing(exprs)
       end
     end
   end
 
   defmacro create_controlled_table(), do: make_controlled_table([])
-  defmacro create_controlled_table([do: {_, _, body}]), do: make_controlled_table(body)
+
+  defmacro create_controlled_table(do: {_, _, body}),
+    do: make_controlled_table(body)
 
   # drop_controlled_table/0
 
@@ -61,18 +70,23 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
   defp make_controlled_acl_index(opts) do
     quote do
       Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@controlled_table), [:acl_id], unquote(opts))
+        Ecto.Migration.index(
+          unquote(@controlled_table),
+          [:acl_id],
+          unquote(opts)
+        )
       )
     end
   end
 
   defmacro create_controlled_acl_index(opts \\ [])
-  defmacro create_controlled_acl_index(opts), do: make_controlled_acl_index(opts)
+
+  defmacro create_controlled_acl_index(opts),
+    do: make_controlled_acl_index(opts)
 
   def drop_controlled_acl_index(opts \\ []) do
     drop_if_exists(index(@controlled_table, [:acl_id], opts))
   end
-
 
   # migrate_controlled/{0,1}
 
@@ -82,6 +96,7 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
       unquote(make_controlled_acl_index([]))
     end
   end
+
   defp mc(:down) do
     quote do
       Bonfire.Data.AccessControl.Controlled.Migration.drop_controlled_acl_index()
@@ -96,6 +111,6 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
         else: unquote(mc(:down))
     end
   end
-  defmacro migrate_controlled(dir), do: mc(dir)
 
+  defmacro migrate_controlled(dir), do: mc(dir)
 end

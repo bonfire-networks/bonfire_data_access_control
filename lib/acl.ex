@@ -13,19 +13,21 @@ defmodule Bonfire.Data.AccessControl.Acl do
     table_id: "11STSPERM1TTED1NTERACT10NS",
     source: "bonfire_data_access_control_acl"
 
-  alias Bonfire.Data.AccessControl.{Acl, Grant, Controlled}
+  alias Bonfire.Data.AccessControl.Acl
+  alias Bonfire.Data.AccessControl.Grant
+  alias Bonfire.Data.AccessControl.Controlled
+
   alias Pointers.Changesets
 
   pointable_schema do
-    has_many :grants, Grant
-    has_many :controlled, Controlled
+    has_many(:grants, Grant)
+    has_many(:controlled, Controlled)
   end
 
   def changeset(acl \\ %Acl{}, params), do: Changesets.cast(acl, params, [])
-
 end
-defmodule Bonfire.Data.AccessControl.Acl.Migration do
 
+defmodule Bonfire.Data.AccessControl.Acl.Migration do
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Acl
@@ -35,14 +37,15 @@ defmodule Bonfire.Data.AccessControl.Acl.Migration do
   defp make_acl_table(exprs) do
     quote do
       require Pointers.Migration
-      Pointers.Migration.create_pointable_table(Bonfire.Data.AccessControl.Acl) do
-        unquote_splicing(exprs)
+
+      Pointers.Migration.create_pointable_table Bonfire.Data.AccessControl.Acl do
+        (unquote_splicing(exprs))
       end
     end
   end
 
   defmacro create_acl_table(), do: make_acl_table([])
-  defmacro create_acl_table([do: {_, _, body}]), do: make_acl_table(body)
+  defmacro create_acl_table(do: {_, _, body}), do: make_acl_table(body)
 
   # drop_acl_table/0
 
@@ -51,6 +54,7 @@ defmodule Bonfire.Data.AccessControl.Acl.Migration do
   # migrate_acl/{0,1}
 
   defp ma(:up), do: make_acl_table([])
+
   defp ma(:down) do
     quote do: Bonfire.Data.AccessControl.Acl.Migration.drop_acl_table()
   end
@@ -62,6 +66,6 @@ defmodule Bonfire.Data.AccessControl.Acl.Migration do
         else: unquote(ma(:down))
     end
   end
-  defmacro migrate_acl(dir), do: ma(dir)
 
+  defmacro migrate_acl(dir), do: ma(dir)
 end
