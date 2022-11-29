@@ -1,0 +1,20 @@
+digraph "xref graph" {
+  "lib/access.ex"
+  "lib/access.ex" -> "lib/grant.ex"
+  "lib/grant.ex" -> "lib/acl.ex"
+  "lib/acl.ex" -> "lib/controlled.ex"
+  "lib/controlled.ex" -> "lib/acl.ex"
+  "lib/acl.ex" -> "lib/grant.ex"
+  "lib/grant.ex" -> "lib/verb.ex"
+  "lib/access.ex" -> "lib/verb.ex"
+  "lib/accesses.ex"
+  "lib/accesses.ex" -> "lib/access.ex" [label="(export)"]
+  "lib/acl.ex"
+  "lib/circle.ex"
+  "lib/circle.ex" -> "lib/encircle.ex"
+  "lib/controlled.ex"
+  "lib/encircle.ex"
+  "lib/grant.ex"
+  "lib/instance_admin.ex"
+  "lib/verb.ex"
+}
