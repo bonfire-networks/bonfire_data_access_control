@@ -19,11 +19,11 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin do
   end
 
   # if the user didn't provide a value, just ignore the changeset
-  defp maybe_ignore(changeset) do
-    if not is_nil(Changeset.get_field(:is_instance_admin)),
-      do: changeset,
-      else: Changeset.apply_action(changeset, :ignore)
-  end
+  #   defp maybe_ignore(changeset) do
+  #     if not is_nil(Changeset.get_field(:is_instance_admin)),
+  #       do: changeset,
+  #       else: Changeset.apply_action(changeset, :ignore)
+  #   end
 end
 
 defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
