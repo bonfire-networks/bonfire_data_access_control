@@ -7,7 +7,7 @@ defmodule Bonfire.Data.AccessControl.Encircle do
     table_id: "1NSERTSAP01NTER1NT0AC1RC1E",
     source: "bonfire_data_access_control_encircle"
 
-  alias Bonfire.Data.AccessControl.Circle
+  # alias Bonfire.Data.AccessControl.Circle
   alias Bonfire.Data.AccessControl.Encircle
 
   alias Ecto.Changeset
