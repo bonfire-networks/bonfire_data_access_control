@@ -33,6 +33,7 @@ defmodule Bonfire.Data.AccessControl.Encircle do
 end
 
 defmodule Bonfire.Data.AccessControl.Encircle.Migration do
+  @moduledoc false
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Encircle

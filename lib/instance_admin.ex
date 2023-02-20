@@ -27,6 +27,7 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin do
 end
 
 defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
+  @moduledoc false
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.InstanceAdmin

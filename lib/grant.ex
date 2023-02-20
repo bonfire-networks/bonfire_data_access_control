@@ -38,6 +38,7 @@ defmodule Bonfire.Data.AccessControl.Grant do
 end
 
 defmodule Bonfire.Data.AccessControl.Grant.Migration do
+  @moduledoc false
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Grant

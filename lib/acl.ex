@@ -28,6 +28,7 @@ defmodule Bonfire.Data.AccessControl.Acl do
 end
 
 defmodule Bonfire.Data.AccessControl.Acl.Migration do
+  @moduledoc false
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Acl

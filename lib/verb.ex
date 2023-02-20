@@ -26,6 +26,7 @@ defmodule Bonfire.Data.AccessControl.Verb do
 end
 
 defmodule Bonfire.Data.AccessControl.Verb.Migration do
+  @moduledoc false
   use Ecto.Migration
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Verb

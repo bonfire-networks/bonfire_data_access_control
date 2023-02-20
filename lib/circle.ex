@@ -26,6 +26,7 @@ defmodule Bonfire.Data.AccessControl.Circle do
 end
 
 defmodule Bonfire.Data.AccessControl.Circle.Migration do
+  @moduledoc false
   import Pointers.Migration
   alias Bonfire.Data.AccessControl.Circle
 
