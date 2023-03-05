@@ -1,5 +1,7 @@
 # Bonfire.Data.AccessControl
 
+See also https://bonfirenetworks.org/docs/boundaries/ for more docs (TODO: merge/deduplicate)
+
 Bonfire has a slightly unusual way of dealing with access control.
 It's not so different from role-based access control (RBAC), but we do
 a few things differently and there are quite a lot of pieces to get
@@ -51,8 +53,8 @@ deny when things are combined. Null values are additionally not
 required to be present in the database, saving us resources. That is
 to say we default to null if there is no relevant record.
 
-Finally, the `Controlled` mixin is used to determine which `Acl` is
-considered when determining permissions.
+Finally, an object is linked to one or more `ACL`s by the `Controlled` multimixin, which pairs an object ID with an ACL ID. Because it is a multimixin, a given object can have multiple ACLs applied. In the case of overlap, permissions are combined in the manner described earlier. 
+
 
 ## Copyright and License
 
