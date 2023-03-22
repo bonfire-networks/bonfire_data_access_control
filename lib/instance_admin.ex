@@ -13,6 +13,7 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin do
   end
 
   def changeset(admin \\ %InstanceAdmin{}, params, cast \\ [:is_instance_admin]) do
+    # TODO: only insert if true
     admin
     |> Changeset.cast(params, cast)
     |> Changeset.validate_required([:is_instance_admin])
