@@ -1,5 +1,6 @@
 defmodule Bonfire.Data.AccessControl.Controlled do
   @moduledoc """
+  An object is linked to one or more `Acl`s by the `Controlled` multimixin, which pairs an object ID with an ACL ID. Because it is a multimixin, a given object can have multiple ACLs applied. In the case of overlap, permissions are combined with `false` being prioritised.
   """
 
   use Pointers.Mixin,

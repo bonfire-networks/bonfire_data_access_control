@@ -11,7 +11,7 @@ Bonfire has a `Verb` table containing strings like "comment" and
 "delete" that represent actions a user might wish to perform. They are
 a basic part of the bonfire vocabulary within the codebase.
 
-A `Permission` is a decision about whether the action may be performed
+A permission is a decision about whether the action may be performed
 it not. There are 3 decisions we support:
 
 * `true` (permitted)
@@ -21,11 +21,11 @@ it not. There are 3 decisions we support:
 It may seem odd to have the `null` here. We will come back to this
 after we've introduced a few more pieces of the puzzle.
 
-A `Boundary` is simply an unordered list or group of `Permission`s. Each
-`Permission` may only occur once. Any `Permission`s that are not specified
+A boundary is simply an unordered list or group of permissions. Each
+permission may only occur once. Any permissions that are not specified
 are assumed to be `null`. This loosely corresponds to a `role` in RBAC.
 
-A `Grant` links a `subject` (user or circle) to a `Boundary`. It
+A `Grant` links a `subject` (user or circle) to a boundary. It
 determines what permissions are considered for a given subject.
 
 A `Acl` is simply an unordered list or group of `Grant`s. Subjects may
@@ -53,7 +53,7 @@ deny when things are combined. Null values are additionally not
 required to be present in the database, saving us resources. That is
 to say we default to null if there is no relevant record.
 
-Finally, an object is linked to one or more `ACL`s by the `Controlled` multimixin, which pairs an object ID with an ACL ID. Because it is a multimixin, a given object can have multiple ACLs applied. In the case of overlap, permissions are combined in the manner described earlier. 
+Finally, an object is linked to one or more `Acl`s by the `Controlled` multimixin, which pairs an object ID with an ACL ID. Because it is a multimixin, a given object can have multiple ACLs applied. In the case of overlap, permissions are combined in the manner described earlier. 
 
 
 ## Copyright and License
