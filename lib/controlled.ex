@@ -25,8 +25,8 @@ defmodule Bonfire.Data.AccessControl.Controlled do
   end
 
   defp maybe_ignore(changeset) do
-    if Changeset.get_field(changeset, :acl_id) ||
-         Changeset.get_field(changeset, :acl),
+    if Pointers.Changesets.get_field(changeset, :acl_id) ||
+         Pointers.Changesets.get_field(changeset, :acl),
        do: changeset,
        else: Changeset.apply_action(changeset, :ignore)
   end
