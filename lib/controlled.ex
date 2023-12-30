@@ -3,7 +3,7 @@ defmodule Bonfire.Data.AccessControl.Controlled do
   An object is linked to one or more `Acl`s by the `Controlled` multimixin, which pairs an object ID with an ACL ID. Because it is a multimixin, a given object can have multiple ACLs applied. In the case of overlap, permissions are combined with `false` being prioritised.
   """
 
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_access_control,
     source: "bonfire_data_access_control_controlled"
 
@@ -25,8 +25,8 @@ defmodule Bonfire.Data.AccessControl.Controlled do
   end
 
   defp maybe_ignore(changeset) do
-    if Pointers.Changesets.get_field(changeset, :acl_id) ||
-         Pointers.Changesets.get_field(changeset, :acl),
+    if Needle.Changesets.get_field(changeset, :acl_id) ||
+         Needle.Changesets.get_field(changeset, :acl),
        do: changeset,
        else: Changeset.apply_action(changeset, :ignore)
   end
@@ -35,7 +35,7 @@ end
 defmodule Bonfire.Data.AccessControl.Controlled.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.AccessControl.Controlled
 
   @controlled_table Controlled.__schema__(:source)
@@ -44,12 +44,12 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
 
   defp make_controlled_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.AccessControl.Controlled do
+      Needle.Migration.create_mixin_table Bonfire.Data.AccessControl.Controlled do
         Ecto.Migration.add(
           :acl_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl),
+          Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl),
           primary_key: true
         )
 

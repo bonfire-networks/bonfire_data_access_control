@@ -1,7 +1,7 @@
 defmodule Bonfire.Data.AccessControl.Circle do
   @moduledoc """
   """
-  use Pointers.Virtual,
+  use Needle.Virtual,
     otp_app: :bonfire_data_access_control,
     table_id: "41RC1ESAREAV1S1B111TYSC0PE",
     source: "bonfire_data_access_control_circle"
@@ -9,8 +9,8 @@ defmodule Bonfire.Data.AccessControl.Circle do
   alias Bonfire.Data.AccessControl.Circle
   alias Bonfire.Data.AccessControl.Encircle
 
-  alias Pointers.Changesets
-  alias Pointers.Pointer
+  alias Needle.Changesets
+  alias Needle.Pointer
 
   virtual_schema do
     has_many(:encircles, Encircle, on_replace: :delete_if_exists)
@@ -27,7 +27,7 @@ end
 
 defmodule Bonfire.Data.AccessControl.Circle.Migration do
   @moduledoc false
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.AccessControl.Circle
 
   def migrate_circle(), do: migrate_virtual(Circle)

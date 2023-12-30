@@ -3,13 +3,13 @@ defmodule Bonfire.Data.AccessControl.Stereotyped do
   A marker that identifies special context-dependent semantics to the system.
   """
 
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_boundaries,
     source: "bonfire_boundaries_stereotype"
 
   alias Bonfire.Data.AccessControl.Stereotyped
   alias Ecto.Changeset
-  alias Pointers.Pointer
+  alias Needle.Pointer
 
   mixin_schema do
     belongs_to(:stereotype, Pointer)
@@ -24,7 +24,7 @@ defmodule Bonfire.Data.AccessControl.Stereotyped do
 
   # if the user didn't provide a stereotype, just ignore the changeset
   defp maybe_ignore(changeset) do
-    if Pointers.Changesets.get_field(changeset, :stereotype_id),
+    if Needle.Changesets.get_field(changeset, :stereotype_id),
       do: changeset,
       else: Changeset.apply_action(changeset, :ignore)
   end
@@ -33,7 +33,7 @@ end
 defmodule Bonfire.Data.AccessControl.Stereotyped.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.AccessControl.Stereotyped
 
   @stereotype_table Stereotyped.__schema__(:source)
@@ -42,12 +42,12 @@ defmodule Bonfire.Data.AccessControl.Stereotyped.Migration do
 
   defp make_stereotype_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.AccessControl.Stereotyped do
+      Needle.Migration.create_mixin_table Bonfire.Data.AccessControl.Stereotyped do
         Ecto.Migration.add(
           :stereotype_id,
-          Pointers.Migration.strong_pointer(),
+          Needle.Migration.strong_pointer(),
           null: false
         )
 

@@ -2,14 +2,14 @@ defmodule Bonfire.Data.AccessControl.Verb do
   @moduledoc """
   """
 
-  use Pointers.Pointable,
+  use Needle.Pointable,
     otp_app: :bonfire_data_access_control,
     table_id: "2W0RDDESCR1B1NGD01NGTH1NGS",
     source: "bonfire_data_access_control_verb"
 
   alias Bonfire.Data.AccessControl.Verb
   alias Ecto.Changeset
-  alias Pointers.Changesets
+  alias Needle.Changesets
 
   pointable_schema do
     field(:verb, :string)
@@ -28,7 +28,7 @@ end
 defmodule Bonfire.Data.AccessControl.Verb.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.AccessControl.Verb
 
   @verb_table Verb.__schema__(:source)
@@ -37,9 +37,9 @@ defmodule Bonfire.Data.AccessControl.Verb.Migration do
 
   defp make_verb_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_pointable_table Bonfire.Data.AccessControl.Verb do
+      Needle.Migration.create_pointable_table Bonfire.Data.AccessControl.Verb do
         Ecto.Migration.add(:verb, :text, null: false)
         unquote_splicing(exprs)
       end

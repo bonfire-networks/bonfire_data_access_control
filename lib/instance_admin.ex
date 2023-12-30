@@ -1,7 +1,7 @@
 defmodule Bonfire.Data.AccessControl.InstanceAdmin do
   @moduledoc "A mixin for superpowers"
 
-  use Pointers.Mixin,
+  use Needle.Mixin,
     otp_app: :bonfire_data_access_control,
     source: "bonfire_data_access_control_instance_admin"
 
@@ -21,7 +21,7 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin do
 
   # if the user didn't provide a value, just ignore the changeset
   #   defp maybe_ignore(changeset) do
-  #     if not is_nil(Pointers.Changesets.get_field(:is_instance_admin)),
+  #     if not is_nil(Needle.Changesets.get_field(:is_instance_admin)),
   #       do: changeset,
   #       else: Changeset.apply_action(changeset, :ignore)
   #   end
@@ -30,7 +30,7 @@ end
 defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.AccessControl.InstanceAdmin
 
   # @instance_admin_table InstanceAdmin.__schema__(:source)
@@ -39,9 +39,9 @@ defmodule Bonfire.Data.AccessControl.InstanceAdmin.Migration do
 
   defp make_instance_admin_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_mixin_table Bonfire.Data.AccessControl.InstanceAdmin do
+      Needle.Migration.create_mixin_table Bonfire.Data.AccessControl.InstanceAdmin do
         Ecto.Migration.add(:is_instance_admin, :bool,
           null: false,
           default: false

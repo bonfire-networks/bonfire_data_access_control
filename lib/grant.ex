@@ -2,7 +2,7 @@ defmodule Bonfire.Data.AccessControl.Grant do
   @moduledoc """
   """
 
-  use Pointers.Pointable,
+  use Needle.Pointable,
     otp_app: :bonfire_data_access_control,
     table_id: "0RANTSS0MEACCESST0ASVBJECT",
     source: "bonfire_data_access_control_grant"
@@ -12,8 +12,8 @@ defmodule Bonfire.Data.AccessControl.Grant do
   alias Bonfire.Data.AccessControl.Verb
 
   alias Ecto.Changeset
-  alias Pointers.Changesets
-  alias Pointers.Pointer
+  alias Needle.Changesets
+  alias Needle.Pointer
 
   pointable_schema do
     belongs_to(:acl, Acl)
@@ -40,7 +40,7 @@ end
 defmodule Bonfire.Data.AccessControl.Grant.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.AccessControl.Grant
 
   @grant_table Grant.__schema__(:source)
@@ -50,24 +50,24 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
 
   defp make_grant_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_pointable_table Bonfire.Data.AccessControl.Grant do
+      Needle.Migration.create_pointable_table Bonfire.Data.AccessControl.Grant do
         Ecto.Migration.add(
           :acl_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl),
+          Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl),
           null: false
         )
 
         Ecto.Migration.add(
           :subject_id,
-          Pointers.Migration.strong_pointer(),
+          Needle.Migration.strong_pointer(),
           null: false
         )
 
         Ecto.Migration.add(
           :verb_id,
-          Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
+          Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
           null: false
         )
 

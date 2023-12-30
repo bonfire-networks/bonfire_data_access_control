@@ -2,7 +2,7 @@
 # defmodule Bonfire.Data.AccessControl.Access do
 #   @moduledoc """
 #   """
-#   use Pointers.Pointable,
+#   use Needle.Pointable,
 #     otp_app: :bonfire_data_access_control,
 #     table_id: "2BVNCH0FPERM1SS10NS1NA11ST",
 #     source: "bonfire_data_access_control_access"
@@ -27,19 +27,19 @@
 
 # defmodule Bonfire.Data.AccessControl.Access.Migration do
 #   use Ecto.Migration
-#   import Pointers.Migration
+#   import Needle.Migration
 #   alias Bonfire.Data.AccessControl.Access
 
 #   # create_access_table/{0,1}
 
 #   defp make_access_table(exprs) do
 #     quote do
-#       require Pointers.Migration
+#       require Needle.Migration
 
-#       Pointers.Migration.create_pointable_table Bonfire.Data.AccessControl.Access do
+#       Needle.Migration.create_pointable_table Bonfire.Data.AccessControl.Access do
 #         Ecto.Migration.add(
 #           :verb_id,
-#           Pointers.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
+#           Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
 #           null: false
 #         )
 

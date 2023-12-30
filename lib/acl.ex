@@ -8,7 +8,7 @@ defmodule Bonfire.Data.AccessControl.Acl do
   of any object.
   """
 
-  use Pointers.Pointable,
+  use Needle.Pointable,
     otp_app: :bonfire_data_access_control,
     table_id: "11STSPERM1TTED1NTERACT10NS",
     source: "bonfire_data_access_control_acl"
@@ -17,7 +17,7 @@ defmodule Bonfire.Data.AccessControl.Acl do
   alias Bonfire.Data.AccessControl.Grant
   alias Bonfire.Data.AccessControl.Controlled
 
-  alias Pointers.Changesets
+  alias Needle.Changesets
 
   pointable_schema do
     has_many(:grants, Grant)
@@ -30,16 +30,16 @@ end
 defmodule Bonfire.Data.AccessControl.Acl.Migration do
   @moduledoc false
   use Ecto.Migration
-  import Pointers.Migration
+  import Needle.Migration
   alias Bonfire.Data.AccessControl.Acl
 
   # create_acl_table/{0,1}
 
   defp make_acl_table(exprs) do
     quote do
-      require Pointers.Migration
+      require Needle.Migration
 
-      Pointers.Migration.create_pointable_table Bonfire.Data.AccessControl.Acl do
+      Needle.Migration.create_pointable_table Bonfire.Data.AccessControl.Acl do
         (unquote_splicing(exprs))
       end
     end
