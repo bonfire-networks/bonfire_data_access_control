@@ -19,6 +19,8 @@ defmodule Bonfire.Data.AccessControl.Circle do
       join_through: Encircle,
       join_keys: [circle_id: :id, subject_id: :id]
     )
+
+    has_one(:stereotyped, Stereotyped, foreign_key: :id, references: :id)
   end
 
   def changeset(circle \\ %Circle{}, params),

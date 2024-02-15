@@ -16,12 +16,15 @@ defmodule Bonfire.Data.AccessControl.Acl do
   alias Bonfire.Data.AccessControl.Acl
   alias Bonfire.Data.AccessControl.Grant
   alias Bonfire.Data.AccessControl.Controlled
+  alias Bonfire.Data.AccessControl.Stereotyped
 
   alias Needle.Changesets
 
   pointable_schema do
     has_many(:grants, Grant)
     has_many(:controlled, Controlled)
+
+    has_one(:stereotyped, Stereotyped, foreign_key: :id, references: :id)
   end
 
   def changeset(acl \\ %Acl{}, params), do: Changesets.cast(acl, params, [])
