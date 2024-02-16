@@ -8,6 +8,7 @@ defmodule Bonfire.Data.AccessControl.Circle do
 
   alias Bonfire.Data.AccessControl.Circle
   alias Bonfire.Data.AccessControl.Encircle
+  alias Bonfire.Data.AccessControl.Stereotyped
 
   alias Needle.Changesets
   alias Needle.Pointer
