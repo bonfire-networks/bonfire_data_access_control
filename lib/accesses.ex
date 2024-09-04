@@ -101,7 +101,7 @@
 
 #   # called by index/3
 #   defp index(_, acc, id, access) do
-#     Needle.ULID.cast!(id)
+#     Needle.UID.cast!(id)
 #     t = %Access{id: id}
 #     Map.merge(acc, %{id => t, access => t})
 #   end
