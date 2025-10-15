@@ -42,15 +42,10 @@ defmodule Bonfire.Data.AccessControl.Stereotyped.Migration do
 
   defp make_stereotype_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_mixin_table Bonfire.Data.AccessControl.Stereotyped do
-        Ecto.Migration.add(
-          :stereotype_id,
-          Needle.Migration.strong_pointer(),
-          null: false
-        )
-
+        add_pointer(:stereotype_id, :strong, Needle.Pointer, null: false)
         unquote_splicing(exprs)
       end
     end

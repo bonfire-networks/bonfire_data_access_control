@@ -45,18 +45,11 @@ defmodule Bonfire.Data.AccessControl.Encircle.Migration do
 
   defp make_encircle_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_pointable_table Bonfire.Data.AccessControl.Encircle do
-        Ecto.Migration.add(
-          :subject_id,
-          Needle.Migration.strong_pointer()
-        )
-
-        Ecto.Migration.add(
-          :circle_id,
-          Needle.Migration.strong_pointer()
-        )
+        add_pointer(:subject_id, :strong)
+        add_pointer(:circle_id, :strong)
 
         unquote_splicing(exprs)
       end

@@ -44,15 +44,10 @@ defmodule Bonfire.Data.AccessControl.Controlled.Migration do
 
   defp make_controlled_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_mixin_table Bonfire.Data.AccessControl.Controlled do
-        Ecto.Migration.add(
-          :acl_id,
-          Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl),
-          primary_key: true
-        )
-
+        add_pointer(:acl_id, :strong, Bonfire.Data.AccessControl.Acl, primary_key: true)
         unquote_splicing(exprs)
       end
     end

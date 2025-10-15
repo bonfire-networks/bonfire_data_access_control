@@ -50,27 +50,12 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
 
   defp make_grant_table(exprs) do
     quote do
-      require Needle.Migration
+      import Needle.Migration
 
       Needle.Migration.create_pointable_table Bonfire.Data.AccessControl.Grant do
-        Ecto.Migration.add(
-          :acl_id,
-          Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Acl),
-          null: false
-        )
-
-        Ecto.Migration.add(
-          :subject_id,
-          Needle.Migration.strong_pointer(),
-          null: false
-        )
-
-        Ecto.Migration.add(
-          :verb_id,
-          Needle.Migration.strong_pointer(Bonfire.Data.AccessControl.Verb),
-          null: false
-        )
-
+        add_pointer(:acl_id, :strong, Bonfire.Data.AccessControl.Acl, null: false)
+        add_pointer(:subject_id, :strong, Needle.Pointer, null: false)
+        add_pointer(:verb_id, :strong, Bonfire.Data.AccessControl.Verb, null: false)
         Ecto.Migration.add(:value, :boolean)
         unquote_splicing(exprs)
       end
