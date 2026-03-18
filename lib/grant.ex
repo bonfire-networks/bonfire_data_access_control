@@ -41,6 +41,7 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   @moduledoc false
   use Ecto.Migration
   import Needle.Migration
+  import Needle.Migration.Indexable
   alias Bonfire.Data.AccessControl.Grant
 
   @grant_table Grant.__schema__(:source)
@@ -116,4 +117,18 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   end
 
   defmacro migrate_grant(dir), do: mg(dir)
+
+  @covering_index [:acl_id, :verb_id, :subject_id, :value]
+
+  def add_grant_covering_index do
+    create_index_for_pointer(@grant_table, @covering_index,
+      name: :bonfire_data_access_control_grant_covering_idx
+    )
+  end
+
+  def drop_grant_covering_index do
+    drop_if_exists(index(@grant_table, @covering_index,
+      name: :bonfire_data_access_control_grant_covering_idx
+    ))
+  end
 end
