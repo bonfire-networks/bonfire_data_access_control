@@ -127,8 +127,8 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
   end
 
   def drop_grant_covering_index do
-    drop_if_exists(index(@grant_table, @covering_index,
-      name: :bonfire_data_access_control_grant_covering_idx
-    ))
+    drop_if_exists(
+      index(@grant_table, @covering_index, name: :bonfire_data_access_control_grant_covering_idx)
+    )
   end
 end
