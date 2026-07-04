@@ -131,4 +131,21 @@ defmodule Bonfire.Data.AccessControl.Grant.Migration do
       index(@grant_table, @covering_index, name: :bonfire_data_access_control_grant_covering_idx)
     )
   end
+
+  @deny_index [:acl_id, :verb_id, :subject_id]
+  @deny_index_name :bonfire_data_access_control_grant_deny_idx
+
+  @doc """
+  Partial index over ONLY the negative grants (`value = false`). Deny grants are a small fraction of the table (~5% observed in production vs 60M+ total rows), so a "does any matching deny exist?" probe against this index scans a near-empty structure instead of the full-size indexes, used by the direct EXISTS/NOT-EXISTS boundary check.
+  """
+  def add_grant_deny_index do
+    create_index_for_pointer(@grant_table, @deny_index,
+      where: "value = false",
+      name: @deny_index_name
+    )
+  end
+
+  def drop_grant_deny_index do
+    drop_if_exists(index(@grant_table, @deny_index, name: @deny_index_name))
+  end
 end
